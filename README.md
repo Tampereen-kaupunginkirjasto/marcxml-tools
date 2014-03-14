@@ -2,12 +2,21 @@
 
 Työkaluja, joita käytettiin PIKI-kirjastojen tietokantadumpin käsittelyssä.
 
+## Vaatimukset / suositukset
+
+- Internet yhteys
+- Git (http://git-scm.org)
+- Composer (http://getcomposer.org)
+- Editori, esim. Notepad++
+- PHP (XMLWriter, XMLReader, DOM)
+
 ## Käyttöohjeet
 
 1. Kloonaa Githubista marcxml-tools-repository
-2. Lataa ja pura MARCXML-muotoinen tietokantadumppi data/dump-hakemistoon
-3. Muokkaa runner.php-tiedostoa ja lisää registerAnalyzers()-kutsuun haluamasi analysoijaluokan instanssi (kts. esimerkki alla)
-4. Suorita seuraava komento: php runner.php tai php runner.php | tee -a logs/my-log.log
+2. Aja komento composer update tai composer install
+3. Lataa ja pura MARCXML-muotoinen tietokantadumppi data/dump-hakemistoon
+4. Muokkaa runner.php-tiedostoa ja lisää registerAnalyzers()-kutsuun haluamasi analysoijaluokan instanssi (kts. esimerkki alla)
+5. Suorita seuraava komento: php runner.php tai php runner.php | tee -a logs/my-log.log
 
 ### Esimerkki analysoijan käytöstä
 
