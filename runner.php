@@ -32,7 +32,7 @@ $analytic->registerAnalyzers(array(
     new FITamPublishYearAnalyzer
 ));
 
-$iterator = new \DirectoryIterator(__DIR__ . '/data');
+$iterator = new \DirectoryIterator(__DIR__ . '/data/dump');
 foreach($iterator as $item) {
 
     if(is_dir($item->getPathname())) {
