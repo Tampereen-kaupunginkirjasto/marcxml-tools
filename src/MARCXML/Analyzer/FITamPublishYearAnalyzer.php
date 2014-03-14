@@ -53,7 +53,7 @@ class FITamPublishYearAnalyzer implements AnalyzerInterface
      */
     public function analyze(\DOMXpath $xpath)
     {
-        $id = $classification = $year = '';
+        $id = $classification = $year = "";
 
         // Detect sub-object and skip them; purpose is only analyze main objects
         // Return early, if it's not main object
@@ -78,23 +78,23 @@ class FITamPublishYearAnalyzer implements AnalyzerInterface
             return;
         }
 
-        $location_string = '';
+        $location_string = "";
         foreach($children as $child) {
 
             // These should be all subfields, but just in case, it's not
-            if($child->tagName !== 'subfield') {
+            if($child->tagName !== "subfield") {
                 continue;
             }
 
-            if($child->getAttribute('code') === 'a') {
+            if($child->getAttribute("code") === "a") {
                 $location_string = $child->nodeValue;
             }
 
             // Identify the node.
-            $code = $child->getAttribute('code');
+            $code = $child->getAttribute("code");
 
             // If it's $h, get the value and trim spaces
-            if($code === 'h') {
+            if($code === "h") {
                 $classification = trim($child->nodeValue);
                 break;
             }
