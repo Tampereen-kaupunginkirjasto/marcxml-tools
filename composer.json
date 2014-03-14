@@ -1,0 +1,10 @@
+{
+    "name": "piki/marcxml-tools",
+    "version": "0.1",
+    "require": {
+        "symfony/console": "2.4.*@dev"
+    },
+    "autoload": {
+        "psr-4": { "PIKI\\": "src/" }
+    }
+}
