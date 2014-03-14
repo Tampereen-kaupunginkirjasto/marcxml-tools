@@ -11,7 +11,7 @@
  *
  * @author Miika Koskela <miika.koskela@pp3.inet.fi>
  * @copyright Tampereen Kaupunginkirjasto - Pirkanmaan maakuntakirjasto
- * @licence MIT-License, see LICENCE.txt for more information
+ * @licence MIT-License, see LICENCE-file for more information
  */
 
 $removals = include __DIR__ . '/config.php';
