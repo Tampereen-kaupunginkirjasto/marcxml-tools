@@ -1,33 +1,35 @@
-# marcxml-tools
+# MarcXML-tools
 
-Työkaluja, joita käytettiin PIKI-kirjastojen tietokantadumpin käsittelyssä.
+Tools, that were used to work with the data dump of PIKI-libraries.
 
-## Vaatimukset / suositukset
+## Requirements
 
-- Internet yhteys
 - Git (http://git-scm.org)
 - Composer (http://getcomposer.org)
-- Editori, esim. Notepad++
+- Editor, eg. Notepad++
 - PHP (XMLWriter, XMLReader, DOM)
 
-## Käyttöohjeet
+## Usage instructions
 
-1. Kloonaa Githubista marcxml-tools-repository
-2. Aja komento composer update tai composer install
-3. Lataa ja pura MARCXML-muotoinen tietokantadumppi data/dump-hakemistoon
-4. Muokkaa runner.php-tiedostoa ja lisää registerAnalyzers()-kutsuun haluamasi analysoijaluokan instanssi (kts. esimerkki alla)
-5. Suorita seuraava komento: php runner.php tai php runner.php | tee -a logs/my-log.log
+1. Clone the `marcxml-tools`-repository
+2. Run `composer update` or `composer install`
+3. Extract the data dump
+4. Edit the `runner.php`-script to suit your needs
+5. Execute `php runner.php`
 
-### Esimerkki analysoijan käytöstä
+### An example
 
-    $analytic = new Analytic;
-    $analytic->registerAnalyzers(array(
-        new \PIKI\MARCXML\Analyzer\K653Analyzer
-    ));
+```PHP
+$analytic = new Analytic;
+$analytic->registerAnalyzers(array(
+    new \PIKI\MARCXML\Analyzer\K653Analyzer
+));
+```
 
-### Saatavilla olevat analysoijat
+### Available analyzers
 
-- \PIKI\MARCXML\Analyzer\K650Analyzer - 650$a ja 650$x + sanasto 650$2
-- \PIKI\MARCXML\Analyzer\K653Analyzer - 653$a
-- \PIKI\MARCXML\Analyzer\FITamPublishYearAnalyzer - 852$a sisältää sanan `tam`
-
+| Class name   | Related MarcXML-tagit
+| ------------ | ----
+| K650Analyzer | 650$a ja 650$x + vocabluary 650$2
+| K653Analyzer | 653$a
+| FITamPublishYearAnalyzer | 852$a contains word *tam*
