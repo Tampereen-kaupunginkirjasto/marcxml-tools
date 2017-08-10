@@ -28,8 +28,8 @@ $analytic->registerAnalyzers(array(
 
 ### Available analyzers
 
-| Class name   | Related MarcXML-tagit
+| Class name   | Related MarcXML-tags
 | ------------ | ----
 | K650Analyzer | 650$a ja 650$x + vocabluary 650$2
 | K653Analyzer | 653$a
-| FITamPublishYearAnalyzer | 852$a contains word *tam*
+| FITamPublishYearAnalyzer | 852$a contains (partial) word *tam*
