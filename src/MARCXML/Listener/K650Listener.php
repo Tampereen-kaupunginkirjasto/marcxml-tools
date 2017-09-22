@@ -11,11 +11,11 @@
 
 namespace PIKI\MARCXML\Analyzer;
 
-use \DOMXPath,
-    \PIKI\MARCXML\Analyzer\AnalyzerInterface;
+use DOMXPath;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Analyzes keywords in MARCXML-record
+ * Collects keywords in MARCXML-record
  *
  * Field information:
  *
@@ -23,18 +23,14 @@ use \DOMXPath,
  * - Code a
  *
  */
-class K650Analyzer implements AnalyzerInterface
+class K650Listener
 {
-    private $keywords = array();
-
     /**
-     * Implements the Analyzer interface.
-     *
-     * @param \DOMXPath xpath
-     * @return
      */
-    public function analyze(DOMXpath $xpath)
+    public function onMarcxmlElement(Event $event)
     {
+        $record = $event->getRecord();
+
         // Identify result node
         $controlfields = $xpath->query("//rc:controlfield[@tag = '001']");
         if($controlfields->length <= 0) {
@@ -79,37 +75,5 @@ class K650Analyzer implements AnalyzerInterface
                 echo "{$id}\t{$tag}\${$code}\t{$keyword}\t{$dictionary}\n";
             }
         }
-    }
-
-    /**
-     * Get count of all keywords
-     *
-     * @param
-     * @return
-     */
-    public function getCount()
-    {
-        return count($this->keywords);
-    }
-
-    /**
-     * Get all codes
-     *
-     * @param
-     * @return
-     */
-    public function getKeywords()
-    {
-        return $this->keywords;
-    }
-
-    public function reset()
-    {
-        $this->keywords = array();
-    }
-
-    public function output()
-    {
-        // Not in use. echo "\n";
     }
 }
