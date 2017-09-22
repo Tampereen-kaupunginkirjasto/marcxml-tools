@@ -2,7 +2,8 @@
     "name": "piki/marcxml-tools",
     "version": "0.1",
     "require": {
-        "symfony/console": "2.4.*@dev"
+        "symfony/event-dispatcher": "^3.3",
+        "monolog/monolog": "^1.23"
     },
     "autoload": {
         "psr-4": { "PIKI\\": "src/" }
