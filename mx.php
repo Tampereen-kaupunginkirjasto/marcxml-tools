@@ -11,49 +11,59 @@
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+
 use PIKI\MARCXML\Event\RecordEvent;
+use PIKI\MARCXML\Listener\KeywordListener;
+use PIKI\MARCXML\Listener\NamespaceListener;
 use PIKI\MARCXML\Xml\Record;
+use PIKI\MARCXML\Iterator\XmlFilter;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
 if($argc !== 2) {
     echo "Usage:\n php mx.php <input-dir>\n";
-    //exit;
+    exit;
 }
+
+$config = json_decode(file_get_contents(
+    __DIR__ . "/config.json"
+), true);
+
+// Logger
+$logger = new Logger("KEYWORDS");
+
+$handler = (new StreamHandler(STDOUT))
+    ->setFormatter(new LineFormatter(
+        "[%datetime%] %channel%.%level_name%: %message%\n"
+    ));
+$logger->pushHandler($handler);
 
 // Wiring up events and dispatcher
 $dispatcher = new EventDispatcher();
-$dispatcher->addListener(RecordEvent::NAME, function(Event $event) {
-    $record = $event->getRecord();
-    var_dump($record); exit;
-});
-
+$dispatcher->addListener(RecordEvent::NAME, [new KeywordListener($logger), "onRecord"]);
 
 // Handling the data
-$iterator = new class(new \DirectoryIterator($argv[1])) extends FilterIterator {
-    public function accept() : bool {
-        $current = parent::current();
-        if(preg_match("/\.xml$/i", $current))
-            return true;
-        return false;
-    }
-};
-
+$iterator = new XmlFilter(new DirectoryIterator($argv[1]));
 foreach($iterator as $item) {
 
-    $reader = new \XMLReader;
+    $reader = new XMLReader;
     $reader->open($item->getPathname(), "UTF-8", LIBXML_NOBLANKS);
+
     $reader->read();
     $reader->read();
 
     do {
 
-        $node = $reader->expand();
-        if($node->nodeName === "records") {
+        if($reader->name !== "record") {
             break;
         }
 
-        $record = new Record($reader->readOuterXML());
+        $record = (new Record($reader->readOuterXML()))
+            ->registerNamespace($config["prefix"], $config["namespace"]);
         $dispatcher->dispatch(RecordEvent::NAME, new RecordEvent($record));
 
     } while($reader->next());
