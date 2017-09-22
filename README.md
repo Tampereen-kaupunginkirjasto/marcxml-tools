@@ -6,7 +6,7 @@ Currently, it's being developed further and it can (hopefully) be used with othe
 
 The idea is that you can write event listeners, which has access to each record in the dataset, one at the time, and extract whatever information you need.
 
-There's currently one event listener available, wichi collects keywords from datafield 650 (and subfield-codes 2, a, x) and logs the details usnig Monolog.
+There's currently one event listener available, which collects keywords from datafield 650 (and subfield-codes 2, a, x) and logs the details usnig Monolog.
 
 Using Monolog is nice thing since you can wire up multiple log handlers, for  example RedisHandler or MongoDBHandler and process the results elsewhere.
 
