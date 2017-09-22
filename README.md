@@ -1,35 +1,27 @@
 # MarcXML-tools
 
-Tools, that were used to work with the data dump of [PIKI](https://piki.verkkokirjasto.fi/web/arena)-libraries.
+Tools, that were originally used to work with the data dump of [PIKI](https://piki.verkkokirjasto.fi/web/arena)-libraries.
+
+Currently, it's being developed further and it can (hopefully) be used with other MARXML-formatted data, too.
+
+The idea is that you can write event listeners, which has access to each record in the dataset, one at the time, and extract whatever information you need.
+
+There's currently one event listener available, wichi collects keywords from datafield 650 (and subfield-codes 2, a, x) and logs the details usnig Monolog.
+
+Using Monolog is nice thing since you can wire up multiple log handlers, for  example RedisHandler or MongoDBHandler and process the results elsewhere.
 
 ## Requirements
 
-- Git (http://git-scm.org)
+- Git (http://git-scm.org) (optional, you can download the ZIP from Github)
 - Composer (http://getcomposer.org)
-- Editor, eg. Notepad++
-- PHP (XMLWriter, XMLReader, DOM)
+- Code editor
+- PHP (tested at least with 7.1.9 on Ubuntu; see composer.json for other dependencies)
+- Some coding skills to change what's needed
 
 ## Usage instructions
 
 1. Clone the `marcxml-tools`-repository
-2. Run `composer update` or `composer install`
-3. Extract the data dump
-4. Edit the `runner.php`-script to suit your needs
-5. Execute `php runner.php`
-
-### An example
-
-```PHP
-$analytic = new Analytic;
-$analytic->registerAnalyzers(array(
-    new \PIKI\MARCXML\Analyzer\K653Analyzer
-));
-```
-
-### Available analyzers
-
-| Class name   | Related MarcXML-tags
-| ------------ | ----
-| K650Analyzer | 650$a ja 650$x + vocabluary 650$2
-| K653Analyzer | 653$a
-| FITamPublishYearAnalyzer | 852$a contains (partial) word *tam*
+2. Run `composer install`
+3. Download and extract the data dump
+4. Edit the `config.json` to suit your needs (optional)
+5. Execute `php mx.php path/to/data`
