@@ -5,8 +5,17 @@ namespace PIKI\MARCXML\Listener;
 use Symfony\Component\EventDispatcher\Event;
 use Psr\Log\LoggerInterface;
 
+/**
+ * KeywordListener
+ *
+ * Finds all official (?) keywords and logs them.
+ *
+ * @author Miika Koskela
+ * @license MIT
+ */
 class KeywordListener
 {
+    // @var Psr\Log\LoggerInterface
     private $logger;
 
     public function __construct(LoggerInterface $logger)
@@ -48,10 +57,6 @@ class KeywordListener
 
                 $keywords[$dictionary] = join(", ", $keywords[$dictionary]);
             }
-        }
-
-        if(count($keywords)> 1) {
-            var_dump($keywords); exit;
         }
 
         $parts = [];

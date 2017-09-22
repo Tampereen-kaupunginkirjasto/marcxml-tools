@@ -10,6 +10,8 @@ There's currently one event listener available, which collects keywords from dat
 
 Using Monolog is nice thing since you can wire up multiple log handlers, for  example RedisHandler or MongoDBHandler and process the results elsewhere.
 
+The keyword listener that comes with the app serves as an example, what you could do.
+
 ## Requirements
 
 - Git (http://git-scm.org) (optional, you can download the ZIP from Github)
