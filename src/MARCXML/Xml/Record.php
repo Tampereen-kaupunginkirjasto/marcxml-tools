@@ -16,11 +16,23 @@ class Record extends DOMDocument
      */
     private $xpath;
 
+    private $nsPrefix;
+
+    private $namespace;
+
     // Constructor
     public function __construct(string $xml)
     {
         $this->loadXML($xml);
         $this->xpath = new DOMXpath($this);
+    }
+
+    public function registerNamespace(string $prefix, string $namespace) : self
+    {
+        $this->nsPrefix = $prefix;
+        $this->namespace = $namespace;
+        $this->xpath->registerNamespace($this->nsPrefix, $this->namespace);
+        return $this;
     }
 
     /**
@@ -39,6 +51,12 @@ class Record extends DOMDocument
         return $this;
     }
 
+    public function getIdentity() : string
+    {
+        $result = $this->query("//{{prefix}}:controlfield[@tag = '001']");
+        return $result->length > 0 ? $result->item(0)->nodeValue : "N/A";
+    }
+
     /**
      * Query as a wrapper for DOMXPath-member.
      *
@@ -51,6 +69,10 @@ class Record extends DOMDocument
      */
     public function query(string $query, DOMNode $context = null, bool $registerNodeNS = true) : DOMNodeList
     {
-        return $this->xpath->query($query, $context, $registerNodeNS);
+        return $this->xpath->query(
+            str_replace("{{prefix}}", $this->nsPrefix, $query),
+            $context,
+            $registerNodeNS
+        );
     }
 }
