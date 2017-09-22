@@ -9,50 +9,36 @@
  * @license MIT-License, see LICENCE-file for more information
  */
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
-
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Formatter\LineFormatter;
-
-use PIKI\MARCXML\Event\RecordEvent;
-use PIKI\MARCXML\Listener\KeywordListener;
-use PIKI\MARCXML\Listener\NamespaceListener;
 use PIKI\MARCXML\Xml\Record;
 use PIKI\MARCXML\Iterator\XmlFilter;
+use PIKI\MARCXML\Event\RecordEvent;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
+// This script requires input directory as a command line -argument.
 if($argc !== 2) {
     echo "Usage:\n php mx.php <input-dir>\n";
     exit;
 }
 
+// Read configuration
 $config = json_decode(file_get_contents(
     __DIR__ . "/config.json"
 ), true);
 
-// Logger
-$logger = new Logger("KEYWORDS");
+$logger = include_once "logger.php";
+$events = include "events.php";
 
-$handler = (new StreamHandler(STDOUT))
-    ->setFormatter(new LineFormatter(
-        "[%datetime%] %channel%.%level_name%: %message%\n"
-    ));
-$logger->pushHandler($handler);
-
-// Wiring up events and dispatcher
-$dispatcher = new EventDispatcher();
-$dispatcher->addListener(RecordEvent::NAME, [new KeywordListener($logger), "onRecord"]);
-
-// Handling the data
+// Handling files
 $iterator = new XmlFilter(new DirectoryIterator($argv[1]));
 foreach($iterator as $item) {
 
     $reader = new XMLReader;
+
+    // Handling data
     $reader->open($item->getPathname(), "UTF-8", LIBXML_NOBLANKS);
 
+    // Advance to first record-tag
     $reader->read();
     $reader->read();
 
@@ -64,6 +50,7 @@ foreach($iterator as $item) {
 
         $record = (new Record($reader->readOuterXML()))
             ->registerNamespace($config["prefix"], $config["namespace"]);
+
         $dispatcher->dispatch(RecordEvent::NAME, new RecordEvent($record));
 
     } while($reader->next());
